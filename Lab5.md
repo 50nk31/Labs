@@ -57,6 +57,44 @@ sudo nano /usr/local/bin/disk_monitor.sh
 ```
  **Код скрипта**
  ```bash
-
+#!/bin/bash
+THRESHOLD=80
+USAGE=$(df / | awk '{print $5}' | tail -1 | sed 's/%//')
+if [ $USAGE -gt $THRESHOLD ]; then
+    echo "Диск заполнен на $USAGE%" | mail -s "Предупреждение: мало места на диске" sonkkkei@bk.ru
+fi
 
 ```
+## 3. Интеграция с systemd
+### 3.1 Сервисный файл
+```bash
+sudo nano /etc/systemd/system/disk_monitor.service
+```
+
+**Код файла**
+```
+[Unit]
+Description=Disk Monitor Service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/disk_monitor.sh
+User=root
+```
+### 3.2 Таймер
+```bash sudo nano /etc/systemd/system/disk_monitor.timer
+```
+
+**Код файла**
+```
+[Unit]
+Description=Run Disk Monitor Daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
