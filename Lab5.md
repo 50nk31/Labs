@@ -82,7 +82,8 @@ ExecStart=/usr/local/bin/disk_monitor.sh
 User=root
 ```
 ### 3.2 Таймер
-```bash sudo nano /etc/systemd/system/disk_monitor.timer
+```bash
+sudo nano /etc/systemd/system/disk_monitor.timer
 ```
 
 **Код файла**
